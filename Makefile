@@ -1,6 +1,6 @@
 
 generate-cover:
-	go test -v -coverpkg=github.com/ybru-tech/georm/... -coverprofile=cover.out ./...
+	go test -v -coverpkg=github.com/simpmeth/geojsonrm/... -coverprofile=cover.out ./...
 
 go-cover-func: generate-cover
 	@go tool cover -func cover.out

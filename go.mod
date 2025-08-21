@@ -1,4 +1,4 @@
-module github.com/ybru-tech/georm
+module github.com/simpmeth/geojsonrm
 
 go 1.23.1
 

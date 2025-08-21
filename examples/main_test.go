@@ -6,7 +6,7 @@ import (
 
 	"gorm.io/gorm"
 
-	"github.com/ybru-tech/georm/examples/testutil"
+	"github.com/simpmeth/geojsonrm/examples/testutil"
 )
 
 var db *gorm.DB

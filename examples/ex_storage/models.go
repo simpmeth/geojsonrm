@@ -1,21 +1,23 @@
 package ex_storage
 
-import "github.com/ybru-tech/georm"
+import (
+	"github.com/simpmeth/geojsonrm"
+)
 
 type Address struct {
 	ID       uint `gorm:"primaryKey"`
 	Address  string
-	GeoPoint georm.Point
+	GeoPoint geojsonrm.Point
 }
 
 type Zone struct {
 	ID         uint `gorm:"primaryKey"`
 	Title      string
-	GeoPolygon georm.Polygon
+	GeoPolygon geojsonrm.Polygon
 }
 
 type Route struct {
 	ID       uint `gorm:"primaryKey"`
 	Title    string
-	GeoRoute georm.LineString
+	GeoRoute geojsonrm.LineString
 }

@@ -1,4 +1,4 @@
-package georm
+package geojsonrm
 
 import (
 	"bytes"
@@ -7,11 +7,11 @@ import (
 	"encoding/hex"
 	"errors"
 	"fmt"
-	"strconv"
-
 	"github.com/twpayne/go-geom"
 	"github.com/twpayne/go-geom/encoding/ewkb"
+	"github.com/twpayne/go-geom/encoding/geojson"
 	"github.com/twpayne/go-geom/encoding/wkt"
+	"strconv"
 )
 
 var (
@@ -22,7 +22,7 @@ var (
 var SRID = 4326
 
 type (
-	Geometry[T geom.T] struct{ Geom T }
+	Geometry[T geom.T] struct{ Geom geom.T }
 
 	Point              = Geometry[*geom.Point]
 	LineString         = Geometry[*geom.LineString]
@@ -35,13 +35,11 @@ type (
 
 func New[T geom.T](geom T) Geometry[T] { return Geometry[T]{geom} }
 
-// Scan impl sql.Scanner
 func (g *Geometry[T]) Scan(value interface{}) (err error) {
 	var (
 		wkb []byte
 		ok  bool
 	)
-
 	switch v := value.(type) {
 	case string:
 		wkb, err = hex.DecodeString(v)
@@ -50,16 +48,13 @@ func (g *Geometry[T]) Scan(value interface{}) (err error) {
 	default:
 		return ErrUnexpectedGeometryType
 	}
-
 	if err != nil {
 		return err
 	}
-
 	geometryT, err := ewkb.Unmarshal(wkb)
 	if err != nil {
 		return err
 	}
-
 	g.Geom, ok = geometryT.(T)
 	if !ok {
 		return ErrUnexpectedValueType
@@ -68,7 +63,6 @@ func (g *Geometry[T]) Scan(value interface{}) (err error) {
 	return
 }
 
-// Value impl driver.Valuer
 func (g Geometry[T]) Value() (driver.Value, error) {
 	if geom.T(g.Geom) == nil {
 		return nil, nil
@@ -78,39 +72,43 @@ func (g Geometry[T]) Value() (driver.Value, error) {
 	if err := ewkb.Write(sb, binary.LittleEndian, g.Geom); err != nil {
 		return nil, err
 	}
-
 	return hex.EncodeToString(sb.Bytes()), nil
 }
 
-// GormDataType impl schema.GormDataTypeInterface
 func (g Geometry[T]) GormDataType() string {
 	srid := strconv.Itoa(SRID)
 
-	switch any(g.Geom).(type) {
-	case *geom.Point:
+	switch any(g).(type) {
+	case Geometry[*geom.Point]:
 		return "Geometry(Point, " + srid + ")"
-	case *geom.LineString:
+	case Geometry[*geom.LineString]:
 		return "Geometry(LineString, " + srid + ")"
-	case *geom.Polygon:
+	case Geometry[*geom.Polygon]:
 		return "Geometry(Polygon, " + srid + ")"
-	case *geom.MultiPoint:
+	case Geometry[*geom.MultiPoint]:
 		return "Geometry(MultiPoint, " + srid + ")"
-	case *geom.MultiLineString:
+	case Geometry[*geom.MultiLineString]:
 		return "Geometry(MultiLineString, " + srid + ")"
-	case *geom.MultiPolygon:
+	case Geometry[*geom.MultiPolygon]:
 		return "Geometry(MultiPolygon, " + srid + ")"
-	case *geom.GeometryCollection:
+	case Geometry[*geom.GeometryCollection]:
 		return "Geometry(GeometryCollection, " + srid + ")"
 	default:
 		return "geometry"
 	}
 }
 
-// String returns geometry formatted using WKT format
 func (g Geometry[T]) String() string {
 	if geomWkt, err := wkt.Marshal(g.Geom); err == nil {
 		return geomWkt
 	}
-
 	return fmt.Sprintf("cannot marshal geometry: %T", g.Geom)
+}
+
+func (g *Geometry[T]) MarshalJSON() ([]byte, error) {
+	return geojson.Marshal(g.Geom)
+}
+
+func (g *Geometry[T]) UnmarshalJSON(data []byte) error {
+	return geojson.Unmarshal(data, &g.Geom)
 }

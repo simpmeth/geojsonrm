@@ -8,7 +8,7 @@ import (
 	"github.com/twpayne/go-geom"
 	"gorm.io/gorm"
 
-	"github.com/ybru-tech/georm"
+	"github.com/simpmeth/geojsonrm"
 )
 
 func equalTableWithGeometries(t *testing.T, expect, actual TableWithAllGeometries) {
@@ -26,41 +26,41 @@ func equalTableWithGeometries(t *testing.T, expect, actual TableWithAllGeometrie
 type TableWithAllGeometries struct {
 	gorm.Model
 
-	Point              georm.Point
-	LineString         georm.LineString
-	Polygon            georm.Polygon
-	MultiPoint         georm.MultiPoint
-	MultiLineString    georm.MultiLineString
-	MultiPolygon       georm.MultiPolygon
-	GeometryCollection georm.GeometryCollection
+	Point              geojsonrm.Point
+	LineString         geojsonrm.LineString
+	Polygon            geojsonrm.Polygon
+	MultiPoint         geojsonrm.MultiPoint
+	MultiLineString    geojsonrm.MultiLineString
+	MultiPolygon       geojsonrm.MultiPolygon
+	GeometryCollection geojsonrm.GeometryCollection
 }
 
 func TestCRUDTableWithAllGeometries(t *testing.T) {
 	var (
 		// test data
-		_point1 = georm.Point{Geom: geom.NewPoint(geom.XY).MustSetCoords(geom.Coord{42, 42}).SetSRID(4326)}
-		_point2 = georm.Point{Geom: geom.NewPoint(geom.XY).MustSetCoords(geom.Coord{1, 1}).SetSRID(4326)}
+		_point1 = geojsonrm.Point{Geom: geom.NewPoint(geom.XY).MustSetCoords(geom.Coord{42, 42}).SetSRID(4326)}
+		_point2 = geojsonrm.Point{Geom: geom.NewPoint(geom.XY).MustSetCoords(geom.Coord{1, 1}).SetSRID(4326)}
 
-		_lineString1 = georm.LineString{Geom: geom.NewLineString(geom.XY).MustSetCoords([]geom.Coord{{42, 42}, {1, 1}}).SetSRID(4326)}
-		_lineString2 = georm.LineString{Geom: geom.NewLineString(geom.XY).MustSetCoords([]geom.Coord{{1, 1}, {2, 2}}).SetSRID(4326)}
+		_lineString1 = geojsonrm.LineString{Geom: geom.NewLineString(geom.XY).MustSetCoords([]geom.Coord{{42, 42}, {1, 1}}).SetSRID(4326)}
+		_lineString2 = geojsonrm.LineString{Geom: geom.NewLineString(geom.XY).MustSetCoords([]geom.Coord{{1, 1}, {2, 2}}).SetSRID(4326)}
 
-		_polygon1 = georm.Polygon{Geom: geom.NewPolygon(geom.XY).MustSetCoords([][]geom.Coord{{{42, 42}, {1, 1}, {2, 2}, {42, 42}}}).SetSRID(4326)}
-		_polygon2 = georm.Polygon{Geom: geom.NewPolygon(geom.XY).MustSetCoords([][]geom.Coord{{{1, 1}, {2, 2}, {3, 3}, {1, 1}}}).SetSRID(4326)}
+		_polygon1 = geojsonrm.Polygon{Geom: geom.NewPolygon(geom.XY).MustSetCoords([][]geom.Coord{{{42, 42}, {1, 1}, {2, 2}, {42, 42}}}).SetSRID(4326)}
+		_polygon2 = geojsonrm.Polygon{Geom: geom.NewPolygon(geom.XY).MustSetCoords([][]geom.Coord{{{1, 1}, {2, 2}, {3, 3}, {1, 1}}}).SetSRID(4326)}
 
-		_multiPoint1 = georm.MultiPoint{Geom: geom.NewMultiPoint(geom.XY).MustSetCoords([]geom.Coord{{42, 42}, {1, 1}}).SetSRID(4326)}
-		_multiPoint2 = georm.MultiPoint{Geom: geom.NewMultiPoint(geom.XY).MustSetCoords([]geom.Coord{{1, 1}, {2, 2}}).SetSRID(4326)}
+		_multiPoint1 = geojsonrm.MultiPoint{Geom: geom.NewMultiPoint(geom.XY).MustSetCoords([]geom.Coord{{42, 42}, {1, 1}}).SetSRID(4326)}
+		_multiPoint2 = geojsonrm.MultiPoint{Geom: geom.NewMultiPoint(geom.XY).MustSetCoords([]geom.Coord{{1, 1}, {2, 2}}).SetSRID(4326)}
 
-		_multiLineString1 = georm.MultiLineString{Geom: geom.NewMultiLineString(geom.XY).MustSetCoords([][]geom.Coord{{{42, 42}, {1, 1}, {2, 2}, {42, 42}}}).SetSRID(4326)}
-		_multiLineString2 = georm.MultiLineString{Geom: geom.NewMultiLineString(geom.XY).MustSetCoords([][]geom.Coord{{{1, 1}, {2, 2}, {3, 3}, {1, 1}}}).SetSRID(4326)}
+		_multiLineString1 = geojsonrm.MultiLineString{Geom: geom.NewMultiLineString(geom.XY).MustSetCoords([][]geom.Coord{{{42, 42}, {1, 1}, {2, 2}, {42, 42}}}).SetSRID(4326)}
+		_multiLineString2 = geojsonrm.MultiLineString{Geom: geom.NewMultiLineString(geom.XY).MustSetCoords([][]geom.Coord{{{1, 1}, {2, 2}, {3, 3}, {1, 1}}}).SetSRID(4326)}
 
-		_multiPolygon1 = georm.MultiPolygon{Geom: geom.NewMultiPolygon(geom.XY).MustSetCoords([][][]geom.Coord{{{{42, 42}, {1, 1}, {2, 2}, {42, 42}}}}).SetSRID(4326)}
-		_multiPolygon2 = georm.MultiPolygon{Geom: geom.NewMultiPolygon(geom.XY).MustSetCoords([][][]geom.Coord{{{{1, 1}, {2, 2}, {3, 3}, {1, 1}}}}).SetSRID(4326)}
+		_multiPolygon1 = geojsonrm.MultiPolygon{Geom: geom.NewMultiPolygon(geom.XY).MustSetCoords([][][]geom.Coord{{{{42, 42}, {1, 1}, {2, 2}, {42, 42}}}}).SetSRID(4326)}
+		_multiPolygon2 = geojsonrm.MultiPolygon{Geom: geom.NewMultiPolygon(geom.XY).MustSetCoords([][][]geom.Coord{{{{1, 1}, {2, 2}, {3, 3}, {1, 1}}}}).SetSRID(4326)}
 
-		_geometryCollection1 = georm.GeometryCollection{Geom: geom.NewGeometryCollection().MustPush(
+		_geometryCollection1 = geojsonrm.GeometryCollection{Geom: geom.NewGeometryCollection().MustPush(
 			geom.NewPoint(geom.XY).MustSetCoords(geom.Coord{42, 42}),
 			geom.NewLineString(geom.XY).MustSetCoords([]geom.Coord{{42, 42}, {1, 1}}),
 		).SetSRID(4326)}
-		_geometryCollection2 = georm.GeometryCollection{Geom: geom.NewGeometryCollection().MustPush(
+		_geometryCollection2 = geojsonrm.GeometryCollection{Geom: geom.NewGeometryCollection().MustPush(
 			geom.NewPoint(geom.XY).MustSetCoords(geom.Coord{1, 1}),
 			geom.NewLineString(geom.XY).MustSetCoords([]geom.Coord{{1, 1}, {2, 2}}),
 		).SetSRID(4326)}

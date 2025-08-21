@@ -3,10 +3,9 @@ package examples
 import (
 	"testing"
 
+	"github.com/simpmeth/geojsonrm"
 	"github.com/stretchr/testify/require"
 	"gorm.io/gorm"
-
-	"github.com/ybru-tech/georm"
 )
 
 type TempTableWithGeometry[Geometry any] struct {
@@ -24,31 +23,31 @@ func TestMigrate(t *testing.T) {
 		expectGeometryType string
 	}{
 		{
-			model:              TempTableWithGeometry[georm.Point]{},
+			model:              TempTableWithGeometry[geojsonrm.Point]{},
 			expectGeometryType: "geometry(Point,4326)",
 		},
 		{
-			model:              TempTableWithGeometry[georm.LineString]{},
+			model:              TempTableWithGeometry[geojsonrm.LineString]{},
 			expectGeometryType: "geometry(LineString,4326)",
 		},
 		{
-			model:              TempTableWithGeometry[georm.Polygon]{},
+			model:              TempTableWithGeometry[geojsonrm.Polygon]{},
 			expectGeometryType: "geometry(Polygon,4326)",
 		},
 		{
-			model:              TempTableWithGeometry[georm.MultiPoint]{},
+			model:              TempTableWithGeometry[geojsonrm.MultiPoint]{},
 			expectGeometryType: "geometry(MultiPoint,4326)",
 		},
 		{
-			model:              TempTableWithGeometry[georm.MultiLineString]{},
+			model:              TempTableWithGeometry[geojsonrm.MultiLineString]{},
 			expectGeometryType: "geometry(MultiLineString,4326)",
 		},
 		{
-			model:              TempTableWithGeometry[georm.MultiPolygon]{},
+			model:              TempTableWithGeometry[geojsonrm.MultiPolygon]{},
 			expectGeometryType: "geometry(MultiPolygon,4326)",
 		},
 		{
-			model:              TempTableWithGeometry[georm.GeometryCollection]{},
+			model:              TempTableWithGeometry[geojsonrm.GeometryCollection]{},
 			expectGeometryType: "geometry(GeometryCollection,4326)",
 		},
 	}

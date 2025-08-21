@@ -1,4 +1,4 @@
-package georm
+package geojsonrm
 
 import (
 	"database/sql/driver"

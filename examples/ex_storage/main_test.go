@@ -5,7 +5,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/ybru-tech/georm/examples/testutil"
+	"github.com/simpmeth/geojsonrm/examples/testutil"
 )
 
 var storage *Storage

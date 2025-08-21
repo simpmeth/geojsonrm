@@ -1,9 +1,8 @@
 package ex_storage
 
 import (
+	"github.com/simpmeth/geojsonrm"
 	"gorm.io/gorm"
-
-	"github.com/ybru-tech/georm"
 )
 
 type Storage struct {
@@ -45,7 +44,7 @@ func (s *Storage) GetAddress(id uint) (*Address, error) {
 }
 
 // FindAddressesInPolygon finds addresses that are inside a polygon
-func (s *Storage) FindAddressesInPolygon(polygon georm.Polygon) ([]Address, error) {
+func (s *Storage) FindAddressesInPolygon(polygon geojsonrm.Polygon) ([]Address, error) {
 	var addresses []Address
 
 	tx := s.db.
@@ -81,7 +80,7 @@ func (s *Storage) GetZone(id uint) (*Zone, error) {
 }
 
 // FindZonesContainingPoint finds zones that contain a point
-func (s *Storage) FindZonesContainingPoint(point georm.Point) ([]Zone, error) {
+func (s *Storage) FindZonesContainingPoint(point geojsonrm.Point) ([]Zone, error) {
 	var zones []Zone
 
 	tx := s.db.
