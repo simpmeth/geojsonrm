@@ -64,7 +64,7 @@ func (g *Geometry[T]) Scan(value interface{}) (err error) {
 }
 
 func (g Geometry[T]) Value() (driver.Value, error) {
-	if geom.T(g.Geom) == nil {
+	if g.Geom == nil {
 		return nil, nil
 	}
 
